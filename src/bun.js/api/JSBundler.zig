@@ -93,53 +93,53 @@ pub const JSBundler = struct {
             if (try config.getArray(globalThis, "plugins")) |array| {
                 var iter = array.arrayIterator(globalThis);
                 while (iter.next()) |plugin| {
-                    if (try plugin.getObject(globalThis, "SECRET_SERVER_COMPONENTS_INTERNALS")) |internals| {
-                        if (internals.get(globalThis, "router")) |router_value| {
-                            if (router_value.as(JSC.API.FileSystemRouter) != null) {
-                                this.server_components.router.set(globalThis, router_value);
-                            } else {
-                                globalThis.throwInvalidArguments("Expected router to be a Bun.FileSystemRouter", .{});
-                                return error.JSError;
-                            }
-                        }
+                    // if (try plugin.getObject(globalThis, "SECRET_SERVER_COMPONENTS_INTERNALS")) |internals| {
+                    //     if (internals.get(globalThis, "router")) |router_value| {
+                    //         if (router_value.as(JSC.API.FileSystemRouter) != null) {
+                    //             this.server_components.router.set(globalThis, router_value);
+                    //         } else {
+                    //             globalThis.throwInvalidArguments("Expected router to be a Bun.FileSystemRouter", .{});
+                    //             return error.JSError;
+                    //         }
+                    //     }
 
-                        const directive_object = (try internals.getObject(globalThis, "directive")) orelse {
-                            globalThis.throwInvalidArguments("Expected directive to be an object", .{});
-                            return error.JSError;
-                        };
+                    //     const directive_object = (try internals.getObject(globalThis, "directive")) orelse {
+                    //         globalThis.throwInvalidArguments("Expected directive to be an object", .{});
+                    //         return error.JSError;
+                    //     };
 
-                        if (try directive_object.getArray(globalThis, "client")) |client_names_array| {
-                            var array_iter = client_names_array.arrayIterator(globalThis);
-                            while (array_iter.next()) |client_name| {
-                                var slice = client_name.toSliceOrNull(globalThis) orelse {
-                                    globalThis.throwInvalidArguments("Expected directive.client to be an array of strings", .{});
-                                    return error.JSException;
-                                };
-                                defer slice.deinit();
-                                try this.server_components.client.append(allocator, OwnedString.initCopy(allocator, slice.slice()) catch unreachable);
-                            }
-                        } else {
-                            globalThis.throwInvalidArguments("Expected directive.client to be an array of strings", .{});
-                            return error.JSException;
-                        }
+                    //     if (try directive_object.getArray(globalThis, "client")) |client_names_array| {
+                    //         var array_iter = client_names_array.arrayIterator(globalThis);
+                    //         while (array_iter.next()) |client_name| {
+                    //             var slice = client_name.toSliceOrNull(globalThis) orelse {
+                    //                 globalThis.throwInvalidArguments("Expected directive.client to be an array of strings", .{});
+                    //                 return error.JSException;
+                    //             };
+                    //             defer slice.deinit();
+                    //             try this.server_components.client.append(allocator, OwnedString.initCopy(allocator, slice.slice()) catch unreachable);
+                    //         }
+                    //     } else {
+                    //         globalThis.throwInvalidArguments("Expected directive.client to be an array of strings", .{});
+                    //         return error.JSException;
+                    //     }
 
-                        if (try directive_object.getArray(globalThis, "server")) |server_names_array| {
-                            var array_iter = server_names_array.arrayIterator(globalThis);
-                            while (array_iter.next()) |server_name| {
-                                var slice = server_name.toSliceOrNull(globalThis) orelse {
-                                    globalThis.throwInvalidArguments("Expected directive.server to be an array of strings", .{});
-                                    return error.JSException;
-                                };
-                                defer slice.deinit();
-                                try this.server_components.server.append(allocator, OwnedString.initCopy(allocator, slice.slice()) catch unreachable);
-                            }
-                        } else {
-                            globalThis.throwInvalidArguments("Expected directive.server to be an array of strings", .{});
-                            return error.JSException;
-                        }
+                    //     if (try directive_object.getArray(globalThis, "server")) |server_names_array| {
+                    //         var array_iter = server_names_array.arrayIterator(globalThis);
+                    //         while (array_iter.next()) |server_name| {
+                    //             var slice = server_name.toSliceOrNull(globalThis) orelse {
+                    //                 globalThis.throwInvalidArguments("Expected directive.server to be an array of strings", .{});
+                    //                 return error.JSException;
+                    //             };
+                    //             defer slice.deinit();
+                    //             try this.server_components.server.append(allocator, OwnedString.initCopy(allocator, slice.slice()) catch unreachable);
+                    //         }
+                    //     } else {
+                    //         globalThis.throwInvalidArguments("Expected directive.server to be an array of strings", .{});
+                    //         return error.JSException;
+                    //     }
 
-                        continue;
-                    }
+                    //     continue;
+                    // }
 
                     // var decl = PluginDeclaration{
                     //     .name = OwnedString.initEmpty(allocator),
